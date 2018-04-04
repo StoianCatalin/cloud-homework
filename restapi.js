@@ -4,10 +4,12 @@ const Logging = require('@google-cloud/logging');
 const request = require('request');
 const vision = require('@google-cloud/vision');
 const port = 3000;
-const client = new vision.ImageAnnotatorClient();
 const projectId = 'my-project-1490450972690';
 
 const logging = new Logging({
+    projectId: projectId,
+});
+const client = new vision.ImageAnnotatorClient({
     projectId: projectId,
 });
 const log = logging.log('api-calls');
