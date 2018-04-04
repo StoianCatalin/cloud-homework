@@ -1,6 +1,14 @@
 const http = require('http');
 const querystring = require('querystring');
+const Logging = require('@google-cloud/logging');
 const port = 3000;
+
+const projectId = 'my-project-1490450972690';
+
+const logging = new Logging({
+    projectId: projectId,
+});
+const log = logging.log('api-calls');
 
 let fruits = [
     {id: 1, name: 'Portocale', price: 200},
@@ -9,7 +17,10 @@ let fruits = [
     {id: 4, name: 'Cirese', price: 100},
 ];
 
+log.write(log.entry({}, 'App has been init.')).then();
+
 const requestHandler = (request, response) => {
+    log.write(log.entry(request, 'Request has been made')).then();
     switch(request.method) {
         case 'GET':
             getHandler(request, response);
@@ -23,6 +34,7 @@ const requestHandler = (request, response) => {
         case 'DELETE':
             deleteHandler(request, response);
     }
+    log.write(log.entry(response, `Response`)).then();
 };
 
 function getHandler(request, response) {
@@ -160,5 +172,6 @@ server.listen(port, (err) => {
     if (err) {
         return console.log('something bad happened', err)
     }
+    log.write(log.entry({}, `server is listening on ${port}`)).then();
     console.log(`server is listening on ${port}`)
 });
