@@ -19,7 +19,7 @@ let fruits = [
 
 request('https://us-central1-plexiform-leaf-135623.cloudfunctions.net/getData', (err, response) => {
     log.write(log.entry({}, { response: response.body })).then();
-    fruits = response.body;
+    fruits = JSON.parse(response.body);
 });
 
 log.write(log.entry({}, 'App has been init.')).then();
