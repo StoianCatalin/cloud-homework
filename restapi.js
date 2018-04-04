@@ -9,15 +9,13 @@ const projectId = 'my-project-1490450972690';
 const logging = new Logging({
     projectId: projectId,
 });
-const client = new vision.ImageAnnotatorClient({
-    projectId: projectId,
-});
+const client = new vision.ImageAnnotatorClient();
 const log = logging.log('api-calls');
 let fruits = [
-    {id: 1, name: 'Portocale', price: 200},
-    {id: 2, name: 'Banane', price: 231},
-    {id: 3, name: 'Capsuni', price: 250},
-    {id: 4, name: 'Cirese', price: 100},
+    {id: 1, name: 'Portocale', price: 200, link: 'https://media.publika.md/md/image/201612/w720/11112_93558600.jpg'},
+    {id: 2, name: 'Banane', price: 231, link: 'http://www.potecaverde.ro/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/f/q/fqycj72xuy_6.jpg'},
+    {id: 3, name: 'Capsuni', price: 250, link: 'http://agrointel.ro/wp-content/uploads/2015/06/Soiul-de-capsuni-Honeoye.jpg'},
+    {id: 4, name: 'Cirese', price: 100, link: 'https://www.antena3.ro/thumbs/big3/2018/02/09/cat-a-ajuns-ca-coste-un-kilogram-de-cirese-in-pietele-din-romania-507968.jpg'},
 ];
 
 request('https://us-central1-plexiform-leaf-135623.cloudfunctions.net/getData', (err, response) => {
@@ -56,9 +54,22 @@ function getHandler(request, response) {
     } else if (request.url.split('/')[1] === 'fruits' && request.url.split('/')[2]) {
         const fruit = fruits.find((f) => f.id == request.url.split('/')[2]);
         if (fruit) {
-            client
-                .labelDetection(`./resources/${fruit.name}.jpg`)
-                .then(results => {
+            request.post('https://vision.googleapis.com/v1/images:annotate?key=AIzaSyCaQ8rCUaDOlJ5OzjEu08i_qqcNIPwSHJM', {
+                requests:[
+                    {
+                        image:{
+                            source: {
+                                imageUri: fruit.link
+                            }
+                        },
+                        features:[
+                            {
+                                type:"LABEL_DETECTION"
+                            }
+                        ]
+                    }
+                ]
+            }).then(results => {
                     const labels = results[0].labelAnnotations;
                     response.setHeader('Content-Type', 'application/json');
                     fruit.labels = labels;
