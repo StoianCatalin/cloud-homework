@@ -54,21 +54,25 @@ function getHandler(request, response) {
     } else if (request.url.split('/')[1] === 'fruits' && request.url.split('/')[2]) {
         const fruit = fruits.find((f) => f.id == request.url.split('/')[2]);
         if (fruit) {
-            rq.post('https://vision.googleapis.com/v1/images:annotate?key=AIzaSyCaQ8rCUaDOlJ5OzjEu08i_qqcNIPwSHJM', {
-                requests:[
-                    {
-                        image:{
-                            source: {
-                                imageUri: fruit.link
-                            }
-                        },
-                        features:[
-                            {
-                                type:"LABEL_DETECTION"
-                            }
-                        ]
-                    }
-                ]
+            rq({
+                method: 'POST',
+                url: 'https://vision.googleapis.com/v1/images:annotate?key=AIzaSyCaQ8rCUaDOlJ5OzjEu08i_qqcNIPwSHJM',
+                body: {
+                    requests:[
+                        {
+                            image:{
+                                source: {
+                                    imageUri: fruit.link
+                                }
+                            },
+                            features:[
+                                {
+                                    type:"LABEL_DETECTION"
+                                }
+                            ]
+                        }
+                    ]
+                }
             }).then(results => {
                     const labels = results[0].labelAnnotations;
                     response.setHeader('Content-Type', 'application/json');
