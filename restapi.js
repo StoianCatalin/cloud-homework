@@ -1,6 +1,7 @@
 const http = require('http');
 const querystring = require('querystring');
 const Logging = require('@google-cloud/logging');
+const request = require('request');
 const port = 3000;
 
 const projectId = 'my-project-1490450972690';
@@ -9,13 +10,17 @@ const logging = new Logging({
     projectId: projectId,
 });
 const log = logging.log('api-calls');
-
 let fruits = [
     {id: 1, name: 'Portocale', price: 200},
     {id: 2, name: 'Banane', price: 231},
     {id: 3, name: 'Capsuni', price: 250},
     {id: 4, name: 'Cirese', price: 100},
 ];
+
+request('https://us-central1-plexiform-leaf-135623.cloudfunctions.net/getData', (err, response) => {
+    log.write(log.entry({}, { response: response.body })).then();
+    fruits = response.body;
+});
 
 log.write(log.entry({}, 'App has been init.')).then();
 

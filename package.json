@@ -10,7 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "@google-cloud/logging": "^1.2.0",
-    "querystring": "^0.2.0"
+    "querystring": "^0.2.0",
+    "request": "^2.85.0"
   },
   "devDependencies": {
     "nodemon": "^1.17.1"
