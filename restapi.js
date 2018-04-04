@@ -2,8 +2,9 @@ const http = require('http');
 const querystring = require('querystring');
 const Logging = require('@google-cloud/logging');
 const request = require('request');
+const vision = require('@google-cloud/vision');
 const port = 3000;
-
+const client = new vision.ImageAnnotatorClient();
 const projectId = 'my-project-1490450972690';
 
 const logging = new Logging({
@@ -53,8 +54,18 @@ function getHandler(request, response) {
     } else if (request.url.split('/')[1] === 'fruits' && request.url.split('/')[2]) {
         const fruit = fruits.find((f) => f.id == request.url.split('/')[2]);
         if (fruit) {
-            response.setHeader('Content-Type', 'application/json');
-            response.end(JSON.stringify(fruit));
+            client
+                .labelDetection(`./resources/${fruit.name}.jpg`)
+                .then(results => {
+                    const labels = results[0].labelAnnotations;
+                    response.setHeader('Content-Type', 'application/json');
+                    fruit.labels = labels;
+                    log.write(log.entry({}, { requestedFruit: fruit })).then();
+                    response.end(JSON.stringify(fruit));
+                })
+                .catch(err => {
+                    console.error('ERROR:', err);
+                });
         } else {
             response.statusCode = 404;
             response.end('Fruit not found!')
