@@ -12,7 +12,8 @@
     "@google-cloud/logging": "^1.2.0",
     "@google-cloud/vision": "^0.18.0",
     "querystring": "^0.2.0",
-    "request": "^2.85.0"
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2"
   },
   "devDependencies": {
     "nodemon": "^1.17.1"
