@@ -1,7 +1,7 @@
 const http = require('http');
 const querystring = require('querystring');
 const Logging = require('@google-cloud/logging');
-const request = require('request');
+const rq = require('request');
 const vision = require('@google-cloud/vision');
 const port = 3000;
 const projectId = 'my-project-1490450972690';
@@ -18,7 +18,7 @@ let fruits = [
     {id: 4, name: 'Cirese', price: 100, link: 'https://www.antena3.ro/thumbs/big3/2018/02/09/cat-a-ajuns-ca-coste-un-kilogram-de-cirese-in-pietele-din-romania-507968.jpg'},
 ];
 
-request('https://us-central1-plexiform-leaf-135623.cloudfunctions.net/getData', (err, response) => {
+rq('https://us-central1-plexiform-leaf-135623.cloudfunctions.net/getData', (err, response) => {
     log.write(log.entry({}, { response: response.body })).then();
     fruits = JSON.parse(response.body);
 });
@@ -54,7 +54,7 @@ function getHandler(request, response) {
     } else if (request.url.split('/')[1] === 'fruits' && request.url.split('/')[2]) {
         const fruit = fruits.find((f) => f.id == request.url.split('/')[2]);
         if (fruit) {
-            request.post('https://vision.googleapis.com/v1/images:annotate?key=AIzaSyCaQ8rCUaDOlJ5OzjEu08i_qqcNIPwSHJM', {
+            rq.post('https://vision.googleapis.com/v1/images:annotate?key=AIzaSyCaQ8rCUaDOlJ5OzjEu08i_qqcNIPwSHJM', {
                 requests:[
                     {
                         image:{
