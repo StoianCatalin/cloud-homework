@@ -34,7 +34,11 @@ const requestHandler = (request, response) => {
         case 'DELETE':
             deleteHandler(request, response);
     }
-    log.write(log.entry(response, `Response`)).then();
+    log.write(log.entry(response, `Response`)).then(() => {
+        console.log('Logged');
+    }).catch((err) => {
+        console.log(err);
+    });
 };
 
 function getHandler(request, response) {
