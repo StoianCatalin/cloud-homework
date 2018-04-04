@@ -20,7 +20,7 @@ let fruits = [
 log.write(log.entry({}, 'App has been init.')).then();
 
 const requestHandler = (request, response) => {
-    log.write(log.entry(request, JSON.stringify(request))).then();
+    log.write(log.entry(request, { method: request.method, body: request.body })).then();
     switch(request.method) {
         case 'GET':
             getHandler(request, response);
@@ -34,7 +34,7 @@ const requestHandler = (request, response) => {
         case 'DELETE':
             deleteHandler(request, response);
     }
-    log.write(log.entry(response, JSON.stringify(response))).then(() => {
+    log.write(log.entry(response, { status: response.statusCode, body: response.body })).then(() => {
         console.log('Logged');
     }).catch((err) => {
         console.log(err);
