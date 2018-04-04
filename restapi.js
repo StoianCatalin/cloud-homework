@@ -57,7 +57,7 @@ function getHandler(request, response) {
             rq({
                 method: 'POST',
                 url: 'https://vision.googleapis.com/v1/images:annotate?key=AIzaSyCaQ8rCUaDOlJ5OzjEu08i_qqcNIPwSHJM',
-                body: {
+                body: JSON.stringify({
                     requests:[
                         {
                             image:{
@@ -72,7 +72,7 @@ function getHandler(request, response) {
                             ]
                         }
                     ]
-                },
+                }),
                 headers: {
                     "content-type": "application/json",
                 },
