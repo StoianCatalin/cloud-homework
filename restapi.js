@@ -72,7 +72,10 @@ function getHandler(request, response) {
                             ]
                         }
                     ]
-                }
+                },
+                headers: {
+                    "content-type": "application/json",
+                },
             }).then(results => {
                     const labels = results[0].labelAnnotations;
                     response.setHeader('Content-Type', 'application/json');
