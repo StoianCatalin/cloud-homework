@@ -2,14 +2,12 @@ const http = require('http');
 const querystring = require('querystring');
 const Logging = require('@google-cloud/logging');
 const rq = require('request-promise');
-const vision = require('@google-cloud/vision');
 const port = 3000;
 const projectId = 'my-project-1490450972690';
 
 const logging = new Logging({
     projectId: projectId,
 });
-const client = new vision.ImageAnnotatorClient();
 const log = logging.log('api-calls');
 let fruits = [
     {id: 1, name: 'Portocale', price: 200, link: 'https://media.publika.md/md/image/201612/w720/11112_93558600.jpg'},
