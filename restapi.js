@@ -10,7 +10,7 @@ const logging = new Logging({
     projectId: projectId,
 });
 const translate = new Translate({
-    projectId: projectId,
+    projectId: 'plexiform-leaf-135623',
 });
 const log = logging.log('api-calls');
 let fruits = [
