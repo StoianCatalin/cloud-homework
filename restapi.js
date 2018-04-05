@@ -52,6 +52,7 @@ function getHandler(request, response) {
     } else if (request.url.split('/')[1] === 'fruits' && request.url.split('/')[2]) {
         const fruit = fruits.find((f) => f.id == request.url.split('/')[2]);
         if (fruit) {
+            console.log('34');
             rq.post({
                 url: 'https://vision.googleapis.com/v1/images:annotate?key=AIzaSyCaQ8rCUaDOlJ5OzjEu08i_qqcNIPwSHJM',
                 json: {
