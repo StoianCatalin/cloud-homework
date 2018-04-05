@@ -1,11 +1,15 @@
 const http = require('http');
 const querystring = require('querystring');
 const Logging = require('@google-cloud/logging');
+const Translate = require('@google-cloud/translate');
 const rq = require('request-promise');
 const port = 3000;
 const projectId = 'my-project-1490450972690';
 
 const logging = new Logging({
+    projectId: projectId,
+});
+const translate = new Translate({
     projectId: projectId,
 });
 const log = logging.log('api-calls');
@@ -52,35 +56,14 @@ function getHandler(request, response) {
     } else if (request.url.split('/')[1] === 'fruits' && request.url.split('/')[2]) {
         const fruit = fruits.find((f) => f.id == request.url.split('/')[2]);
         if (fruit) {
-            console.log('34');
-            rq.post({
-                url: 'https://vision.googleapis.com/v1/images:annotate?key=AIzaSyCaQ8rCUaDOlJ5OzjEu08i_qqcNIPwSHJM',
-                json: {
-                    requests:[{
-                        image:{
-                            source: {
-                                imageUri: fruit.link
-                            }
-                        },
-                        features:[
-                            {
-                                type:"LABEL_DETECTION"
-                            }
-                        ]
-                    }
-                    ]
-                },
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-
-            }).then(results => {
-                console.log(results);
-                fruit.labels = results[0].labelAnnotations;
-                // log.write(log.entry({}, { requestedFruit: fruit })).then();
-                response.setHeader('Content-Type', 'application/json');
-                response.end(JSON.stringify(fruit));
-            })
+            translate
+                .translate(text, 'ru')
+                .then(results => {
+                    fruit.rusianRu = results[0];
+                    log.write(log.entry({}, { requestedFruit: fruit })).then();
+                    response.setHeader('Content-Type', 'application/json');
+                    response.end(JSON.stringify(fruit));
+                })
                 .catch(err => {
                     console.error('ERROR:', err);
                 });
