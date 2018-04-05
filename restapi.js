@@ -77,7 +77,7 @@ function getHandler(request, response) {
                 const labels = results[0].labelAnnotations;
                 response.setHeader('Content-Type', 'application/json');
                 fruit.labels = labels;
-                log.write(log.entry({}, { requestedFruit: fruit })).then();
+                // log.write(log.entry({}, { requestedFruit: fruit })).then();
                 response.end(JSON.stringify(fruit));
             })
                 .catch(err => {
