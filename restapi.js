@@ -57,7 +57,7 @@ function getHandler(request, response) {
         const fruit = fruits.find((f) => f.id == request.url.split('/')[2]);
         if (fruit) {
             translate
-                .translate(text, 'ru')
+                .translate(fruit.name, 'ru')
                 .then(results => {
                     fruit.rusianRu = results[0];
                     log.write(log.entry({}, { requestedFruit: fruit })).then();
