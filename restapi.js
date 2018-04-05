@@ -74,10 +74,10 @@ function getHandler(request, response) {
                 }
 
             }).then(results => {
-                const labels = results[0].labelAnnotations;
-                response.setHeader('Content-Type', 'application/json');
-                fruit.labels = labels;
+                console.log(results);
+                fruit.labels = results[0].labelAnnotations;
                 // log.write(log.entry({}, { requestedFruit: fruit })).then();
+                response.setHeader('Content-Type', 'application/json');
                 response.end(JSON.stringify(fruit));
             })
                 .catch(err => {
