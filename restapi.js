@@ -56,17 +56,9 @@ function getHandler(request, response) {
     } else if (request.url.split('/')[1] === 'fruits' && request.url.split('/')[2]) {
         const fruit = fruits.find((f) => f.id == request.url.split('/')[2]);
         if (fruit) {
-            translate
-                .translate(fruit.name, 'ru')
-                .then(results => {
-                    fruit.rusianRu = results[0];
-                    log.write(log.entry({}, { requestedFruit: fruit })).then();
-                    response.setHeader('Content-Type', 'application/json');
-                    response.end(JSON.stringify(fruit));
-                })
-                .catch(err => {
-                    console.error('ERROR:', err);
-                });
+            log.write(log.entry({}, { requestedFruit: fruit })).then();
+            response.setHeader('Content-Type', 'application/json');
+            response.end(JSON.stringify(fruit));
         } else {
             response.statusCode = 404;
             response.end('Fruit not found!')
